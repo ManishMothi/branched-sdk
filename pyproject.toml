@@ -25,4 +25,5 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.0"
+dotenv = "^0.9.9"
 

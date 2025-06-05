@@ -30,6 +30,7 @@ from generated.branched_backend_client.models.http_validation_error import HTTPV
 from generated.branched_backend_client.models.tree_node_create import TreeNodeCreate
 from generated.branched_backend_client.models.tree_node_read import TreeNodeRead
 from generated.branched_backend_client.models.error_response import ErrorResponse
+from generated.branched_backend_client.models.health_check_api_v1_sessions_health_get_response_health_check_api_v1_sessions_health_get import HealthCheckApiV1SessionsHealthGetResponseHealthCheckApiV1SessionsHealthGet as HealthCheckResponse
 
 from .errors import BranchedError
 from .utils import retry_on_5xx
@@ -94,7 +95,7 @@ class BranchedClient:
         try:
             response = _post_branch(
                 session_id=session_id,
-                client=_GeneratedClient,
+                client=self._client,
                 body=body
             )
         except Exception as e:
@@ -117,7 +118,7 @@ class BranchedClient:
         try:
             response = _delete_session(
                 session_id=session_id,
-                client=_GeneratedClient
+                client=self._client
             )
         except Exception as e:
             raise BranchedError.from_exception(e)
@@ -139,7 +140,7 @@ class BranchedClient:
             response = _delete_branch(
                 session_id=session_id,
                 branch_id=branch_id,
-                client=_GeneratedClient
+                client=self._client
             )
         except Exception as e:
             raise BranchedError.from_exception(e)
@@ -160,7 +161,7 @@ class BranchedClient:
             response = _get_messages(
                 session_id=session_id,
                 branch_id=branch_id,
-                client=_GeneratedClient
+                client=self._client
             )
         except Exception as e:
             raise BranchedError.from_exception(e)
@@ -178,7 +179,7 @@ class BranchedClient:
         """ 
         try:
             response = _get_my_sessions(
-                client=_GeneratedClient
+                client=self._client
             )
         except Exception as e:
             raise BranchedError.from_exception(e)
@@ -198,7 +199,7 @@ class BranchedClient:
         try:
             response = _get_session_info(
                 session_id=session_id,
-                client=_GeneratedClient
+                client=self._client
             )
         except Exception as e:
             raise BranchedError.from_exception(e)
@@ -211,4 +212,20 @@ class BranchedClient:
         return response.parsed 
 
 
+    @retry_on_5xx
+    def health_check(self) -> HealthCheckResponse:
+        """
+        Check if the server is healthy. Returns a HealthCheckResponse object.
+        """
+        try:
+            response = _health_check(
+                client=self._client
+            )
+        except Exception as e:
+            raise BranchedError.from_exception(e)
 
+        if response.status_code >= 400:
+            detail = response.parsed.detail if response.parsed else ""
+            raise BranchedError.from_response(response.status_code, detail)
+
+        return response.parsed

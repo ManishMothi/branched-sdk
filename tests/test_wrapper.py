@@ -4,8 +4,8 @@ from uuid import UUID
 from unittest.mock import MagicMock
 
 from branched_sdk.wrapper import BranchedClient, BranchedError
-from generated.branched_backend_client.models import ChatSessionRead, ErrorResponse
-from generated.branched_backend_client.models.tree_node_read import TreeNodeRead
+from branched_sdk.generated.branched_backend_client.models import ChatSessionRead, ErrorResponse
+from branched_sdk.generated.branched_backend_client.models.tree_node_read import TreeNodeRead
 
 # Test data constants
 TEST_SESSION_ID = UUID("12345678-1234-5678-1234-567812345678")
@@ -259,4 +259,3 @@ def test_get_session_info_success(monkeypatch, mock_client: BranchedClient):
     assert isinstance(response, ChatSessionRead)
     assert response.id == TEST_SESSION_ID
     assert response.user_id == TEST_USER_ID
-

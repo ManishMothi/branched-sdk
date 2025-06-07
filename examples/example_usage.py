@@ -12,12 +12,12 @@ Set up your environment first:
 import os
 import time
 import sys
-from uuid import UUID
-from typing import Optional, Tuple
-from dotenv import load_dotenv
 
 # Import the Branched SDK
 from branched_sdk import BranchedClient, BranchedError
+
+# Import types
+from branched_sdk.types import TreeNodeCreate, TreeNodeRead, ChatSessionRead, ChatSessionCreate
 
 def print_header(title: str):
     """Print a formatted section header."""
@@ -62,8 +62,6 @@ def wait_for_server(client: BranchedClient, max_retries: int = 5, initial_delay:
 
 def run_example():
     """Run the example usage of the Branched SDK."""
-    # Load environment variables from .env file if it exists
-    load_dotenv()
     
     # Get API key from environment variables
     api_key = os.getenv("BRANCHED_API_KEY")

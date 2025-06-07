@@ -1,5 +1,4 @@
 from tenacity import retry, wait_exponential, stop_after_attempt, retry_if_exception_type
-import requests
 import httpx
 
 # Retry on any httpx.HTTPStatusError with 500–599, up to 3 attempts with exponential backoff.
